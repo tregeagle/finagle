@@ -10,6 +10,8 @@ Personal finance app for tracking stock transactions and calculating Australian 
 
 It will be as if you have never been here....
 
+https://finagle-production.up.railway.app/
+
 ## Features
 
 - **User Management** — Create, retrieve, and delete user accounts with isolated data per user
