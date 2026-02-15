@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { importCSV, getImportTemplateURL, type ImportResult } from "../api/client";
+import { importCSV, downloadImportTemplate, type ImportResult } from "../api/client";
 
 interface Props {
   userId: number;
@@ -43,12 +43,12 @@ export default function Import({ userId }: Props) {
       <h2 className="text-xl font-bold text-gray-900 mb-4">Import Transactions</h2>
 
       <div className="mb-4">
-        <a
-          href={getImportTemplateURL()}
+        <button
+          onClick={() => downloadImportTemplate()}
           className="text-blue-600 hover:underline text-sm"
         >
           Download CSV template
-        </a>
+        </button>
       </div>
 
       {error && (

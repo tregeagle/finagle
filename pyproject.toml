@@ -16,6 +16,7 @@ dependencies = [
     "python-multipart>=0.0.18",
     "openpyxl>=3.1.5",
     "python-calamine>=0.6.1",
+    "slowapi>=0.1.9",
 ]
 
 [project.optional-dependencies]

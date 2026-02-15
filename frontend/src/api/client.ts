@@ -1,13 +1,31 @@
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1";
+const API_KEY = import.meta.env.VITE_API_KEY || "";
+
+function authHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {};
+  if (API_KEY) headers["X-API-Key"] = API_KEY;
+  return headers;
+}
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, init);
+  const merged: RequestInit = { ...init };
+  merged.headers = { ...authHeaders(), ...(init?.headers as Record<string, string>) };
+  const res = await fetch(`${BASE_URL}${path}`, merged);
   if (!res.ok) {
     const body = await res.text();
     throw new Error(`${res.status}: ${body}`);
   }
   if (res.status === 204) return undefined as T;
   return res.json();
+}
+
+async function requestBlob(path: string): Promise<Blob> {
+  const res = await fetch(`${BASE_URL}${path}`, { headers: authHeaders() });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`${res.status}: ${body}`);
+  }
+  return res.blob();
 }
 
 // --- Types ---
@@ -135,10 +153,22 @@ export function deleteUser(userId: number) {
   return request<void>(`/users/${userId}`, { method: "DELETE" });
 }
 
-export function getExportURL(userId: number, format: "json" | "csv" = "json") {
-  return `${BASE_URL}/users/${userId}/export?format=${format}`;
+export async function downloadExport(userId: number, format: "json" | "csv" = "json") {
+  const blob = await requestBlob(`/users/${userId}/export?format=${format}`);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `transactions.${format}`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
-export function getImportTemplateURL() {
-  return `${BASE_URL}/import/template`;
+export async function downloadImportTemplate() {
+  const blob = await requestBlob("/import/template");
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "stock_transactions.csv";
+  a.click();
+  URL.revokeObjectURL(url);
 }

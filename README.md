@@ -47,8 +47,12 @@ uv sync
 | Variable | Description | Default |
 |---|---|---|
 | `FINAGLE_DATABASE_URL` | Database connection string | `sqlite:///finagle.db` |
+| `FINAGLE_API_KEY` | API key for authentication (empty = auth disabled) | _(empty)_ |
+| `FINAGLE_ENVIRONMENT` | `dev` or `production` (hides docs in production) | `dev` |
+| `FINAGLE_MAX_UPLOAD_MB` | Maximum upload file size in MB | `10` |
 | `FINAGLE_CORS_ORIGINS` | Comma-separated allowed CORS origins | `http://localhost:5173` |
 | `VITE_API_URL` | API base URL (frontend `.env`) | `http://localhost:8000/api/v1` |
+| `VITE_API_KEY` | API key sent by the frontend (must match `FINAGLE_API_KEY`) | _(empty)_ |
 
 ### Running
 
