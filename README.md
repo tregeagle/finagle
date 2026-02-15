@@ -1,6 +1,12 @@
 # Finagle
 
-API-first personal finance app for tracking stock transactions and calculating Australian Capital Gains Tax (CGT).
+Do you tax return this year like a ninja.
+
+Personal finance app for tracking stock transactions and calculating Australian Capital Gains Tax (CGT).
+
+Accounts are simply created with a name and no other identifying information. Import your trading histories using CSV's from Sharesight, Pearler and Finagle.
+
+Once done you can export the whole thing as a CSV and delete your account. 
 
 ## Features
 
