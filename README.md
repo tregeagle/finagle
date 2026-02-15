@@ -1,12 +1,14 @@
 # Finagle
 
-Do you tax return this year like a ninja.
+Sort your finances **like a ninja**!
 
 Personal finance app for tracking stock transactions and calculating Australian Capital Gains Tax (CGT).
 
-Accounts are simply created with a name and no other identifying information. Import your trading histories using CSV's from Sharesight, Pearler and Finagle.
+**Get In:** Accounts are simply created with a name and no other identifying information. Import your trading histories using CSV's from Sharesight, Pearler and Finagle. 
 
-Once done you can export the whole thing as a CSV and delete your account. 
+**Get Out:** Once done you can export the whole thing as a CSV and delete your account. 
+
+It will be as if you have never been here....
 
 ## Features
 
@@ -133,6 +135,39 @@ Base URL: `/api/v1`
 |---|---|---|
 | GET | `/users/{user_id}/reports/cgt` | CGT overview for all financial years |
 | GET | `/users/{user_id}/reports/cgt/{fy}` | Detailed CGT report for a financial year (e.g. `2023-24`) |
+
+## Deploying to Railway
+
+Railway runs the app as a single Docker service — backend and frontend on the same origin.
+
+### Setup
+
+1. Create a new Railway project and link this repo
+2. Add a **Volume** mounted at `/data` (for SQLite persistence)
+3. Set the following **service variables**:
+
+| Variable | Value |
+|---|---|
+| `FINAGLE_DATABASE_URL` | `sqlite:////data/finagle.db` |
+| `FINAGLE_API_KEY` | _(generate a secret token)_ |
+| `FINAGLE_ENVIRONMENT` | `production` |
+| `FINAGLE_CORS_ORIGINS` | `https://<your-app>.up.railway.app` |
+
+4. Set the following **build variables** (used as Docker build args):
+
+| Variable | Value |
+|---|---|
+| `VITE_API_KEY` | _(same token as `FINAGLE_API_KEY`)_ |
+| `VITE_API_URL` | `/api/v1` |
+
+5. Deploy — Railway will build the Dockerfile, run Alembic migrations on start, and serve the app on port 8000
+
+### Local Docker test
+
+```bash
+docker build --build-arg VITE_API_KEY=test --build-arg VITE_API_URL=/api/v1 -t finagle .
+docker run -p 8000:8000 -e FINAGLE_API_KEY=test finagle
+```
 
 ## Project Structure
 
